@@ -272,7 +272,7 @@ Command: INTENSITY -­> Changes the Intensity
 (Ex: INTENSITY 1000)
 
 Command: DELAY -­> Changes the Error Delay
-(Ex: INTENSITY 500)
+(Ex: DELAY 500)
 
 Command: MAXUNITS -­> Changes the Maximum Infinite Units
 (Ex: MAXUNITS 400)
@@ -294,11 +294,15 @@ Command: DESELECT -­> Deselects a memory domain
 
 ­> [L3 Total Control] Has access to everything
 
+Command: SAVESTATE -> Makes a new savestate
+Command: LOADSTATE -> Loads the selected savestate
+Command: GHBLAST -­> Blasts to Glitch
+Command: SENDSTOCKPILE -­> Sends last selected item to stockpile
+
 Command: RESET -­> Resets the current game
 Command: RELOAD -­> Reloads the last selected stash/stockpile item
 Command: RAW -­> Sends the current emulator state to stash history
 Command: REBLAST -­> Reapplies the last corruption again
-
 ");
         }
     }
@@ -850,12 +854,55 @@ Command: REBLAST -­> Reapplies the last corruption again
                                     if (!PluginForm.pf.rbTotalControl.Checked)
                                         break;
 
-                                    UICore.CheckHotkey("REBLAST");
+                                    UICore.CheckHotkey("BlastLayer Re-Blast");
 
                                     Console($"Re-Blast last corruption");
                                     break;
                                 }
 
+                            case "SAVESTATE":
+                                {
+                                    if (!PluginForm.pf.rbTotalControl.Checked)
+                                        break;
+
+                                    UICore.CheckHotkey("New Savestate");
+
+                                    Console($"Created a new savestate");
+                                    break;
+                                }
+                            case "LOADSTATE":
+                                {
+                                    if (!PluginForm.pf.rbTotalControl.Checked)
+                                        break;
+
+                                    UICore.CheckHotkey("Load");
+
+                                    Console($"Loaded the current savestate");
+                                    break;
+                                }
+                            case "GHBLAST":
+                                {
+                                    if (!PluginForm.pf.rbTotalControl.Checked)
+                                        break;
+
+                                    UICore.CheckHotkey("Load and Corrupt");
+
+                                    Console($"Fired GH Corrupt");
+                                    break;
+                                }
+                            case "SENDSTOCKPILE":
+                                {
+                                    if (!PluginForm.pf.rbTotalControl.Checked)
+                                        break;
+
+                                    S.GET<StashHistoryForm>().DontLoadSelectedStash = true;
+                                    S.GET<StashHistoryForm>().lbStashHistory.SelectedIndex = S.GET<StashHistoryForm>().lbStashHistory.Items.Count - 1;
+
+                                    UICore.CheckHotkey("Stash->Stockpile");
+
+                                    Console($"Sent stash item to stockpile");
+                                    break;
+                                }
 
                         }
 
